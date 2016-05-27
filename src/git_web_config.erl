@@ -40,6 +40,9 @@ web_config() ->
     [
      {ip, Ip},
      {port, Port},
+     {ssl, true},
+     {ssl_opts, [{certfile, "/etc/git_web/server.crt"},
+                {keyfile, "/etc/git_web/server.key"}]},
      {log_dir, "priv/log"},
      {dispatch, dispatch()}
     ].
