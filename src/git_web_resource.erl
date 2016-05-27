@@ -35,4 +35,8 @@ init(Config) ->
 %%{ok, Config}.
 
 to_html(ReqData, State) ->
-    {"<html><body>Hello, world (no autorization required)</body></html>", ReqData, State}.
+    {ok, App} = application:get_application(?MODULE),
+    {ok, RepoRoot} = application:get_env(App, repo_root),
+    GitDirs = recursive_search:find_by_name([RepoRoot],"\\\.git$",dir),
+    [Head|Tail] = GitDirs,
+    {"<html><body>" ++ Head ++ "</body></html>", ReqData, State}.
