@@ -1,0 +1,6 @@
+rebar.lock
+doc/
+priv/
+_build
+*.o
+*.beam
