@@ -2,5 +2,7 @@
 
 -setcookie git_web_cookie__DO_NOT_REUSE
 
+-kernel inet_dist_use_interface "{127,0,0,1}"
+
 +K true
 +A30
