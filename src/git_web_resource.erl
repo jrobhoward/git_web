@@ -23,7 +23,9 @@
 
 %% API
 -export([init/1,
-         to_html/2]).
+	 allowed_methods/2,
+	 content_types_provided/2,
+	 to_text/2]).
 
 -include_lib("webmachine/include/webmachine.hrl").
 
@@ -34,9 +36,16 @@ init(Config) ->
     { {trace, TraceDir}, Config}.
 %%{ok, Config}.
 
-to_html(ReqData, State) ->
+allowed_methods(ReqData, Context) ->
+    {['GET'], ReqData, Context}.
+
+content_types_provided(ReqData, Context) ->
+    {[{"text/plain", to_text}], ReqData, Context}.
+
+to_text(ReqData, State) ->
     {ok, App} = application:get_application(?MODULE),
     {ok, RepoRoot} = application:get_env(App, repo_root),
     GitDirs = recursive_search:find_by_name([RepoRoot],"\\\.git$",dir),
-    [Head|Tail] = GitDirs,
-    {"<html><body>" ++ Head ++ "</body></html>", ReqData, State}.
+    LineSep = io_lib:nl(),
+	Output = string:join(GitDirs, LineSep),
+	{Output, ReqData, State}.
